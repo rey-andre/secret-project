@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GASS Button Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /* Align elements vertically */
+        }
+        .btn-custom {
+            padding: 20px 40px;
+            font-size: 2rem;
+            margin-top: 20px; /* Adds space between buttons */
+        }
+    </style>
+</head>
+<body>
+    <button type="button" class="btn btn-warning" id="btn_cek">Cek duls</button>
+    <!-- <textarea id="cek_absen" class="form-control m-3" rows="10" cols="50" disabled></textarea> -->
+    <h4 id="cek_absen" class="m-3"></h4>
+    <button type="button" class="btn btn-primary btn-custom" id="btn_gas">GASS</button>
+    <textarea id="isi_absen" class="form-control m-3" rows="5" cols="50" hidden disabled></textarea>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $('#btn_cek').click(function() {
+            $('#btn_cek').attr('disabled', true);
+            $.ajax({
+                url: "https://ess-dev.jiarsi.com/dev/api/attendance_check",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    employee_id: 1788,
+                },
+                success: function (response, textStatus, jqXHR) {
+                    if (response.data == null) {
+                        $('#cek_absen').html('Belom ngab');
+                        $('#isi_absen').attr('hidden', true);
+                    } else if (response.data.jam_pulang == null) {
+                        $('#cek_absen').html('Udah absen masuk, tapi belom absen balik nih');
+                        $('#isi_absen').attr('hidden', true);
+                    } else {
+                        $('#cek_absen').html('Absen masuk sma balik udah diisi ngab');
+                        $('#isi_absen').val(JSON.stringify(response.data, null, 2));
+                        $('#isi_absen').removeAttr('hidden');
+                    }
+                },
+                complete: function() {
+                    $('#btn_cek').removeAttr('disabled');
+                }
+            });
+        });
+        $('#btn_gas').click(function() {
+            var data = {
+                tipe_absen: "WFO",
+                employee_id: "1788",
+                note: "-",
+                latitude: "-6.2920371",
+                longitude: "106.639945",
+                address: "Jalan BSD Raya Utama, Pagedangan, Kecamatan Pagedangan, Banten, 15339, Indonesia",
+                // attendance_time: attendance_time,
+                // attendance_datetime: attendance_datetime
+            };
+            $('#btn_gas').attr('disabled', true);
+            $.ajax({
+                url: "https://ess-dev.jiarsi.com/dev/api/attendance_create",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    tipe_absen: "WFO",
+                    employee_id: "1788",
+                    note: "-",
+                    latitude: "-6.2920371",
+                    longitude: "106.639945",
+                    address: "Jalan BSD Raya Utama, Pagedangan, Kecamatan Pagedangan, Banten, 15339, Indonesia",
+                },
+                success: function (response, textStatus, jqXHR) {
+                    swal.fire({
+                        title: "DONN !",
+                        text: "Aman",
+                        icon: "success",
+                    })
+                },
+                complete: function() {
+                    $('#btn_gas').removeAttr('disabled');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
