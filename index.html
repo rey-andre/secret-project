@@ -26,7 +26,7 @@
     <button type="button" class="btn btn-warning" id="btn_cek">Cek duls</button>
     <!-- <textarea id="cek_absen" class="form-control m-3" rows="10" cols="50" disabled></textarea> -->
     <h4 id="cek_absen" class="m-3"></h4>
-    <button type="button" class="btn btn-primary btn-custom" id="btn_gas">GASS</button>
+    <button type="button" class="btn btn-primary btn-custom" id="btn_gas" disabled>GASS</button>
     <textarea id="isi_absen" class="form-control m-3" rows="5" cols="50" hidden disabled></textarea>
 
     <!-- Bootstrap JS -->
@@ -46,15 +46,18 @@
                 },
                 success: function (response, textStatus, jqXHR) {
                     if (response.data == null) {
-                        $('#cek_absen').html('Belom ngab');
+                        $('#cek_absen').html('Belom absen ni ngab');
                         $('#isi_absen').attr('hidden', true);
+                        $('#btn_gas').removeAttr('disabled');
                     } else if (response.data.jam_pulang == null) {
                         $('#cek_absen').html('Udah absen masuk, tapi belom absen balik nih');
                         $('#isi_absen').attr('hidden', true);
+                        $('#btn_gas').removeAttr('disabled');
                     } else {
                         $('#cek_absen').html('Absen masuk sma balik udah diisi ngab');
                         $('#isi_absen').val(JSON.stringify(response.data, null, 2));
                         $('#isi_absen').removeAttr('hidden');
+                        $('#btn_gas').attr('disabled', true);
                     }
                 },
                 complete: function() {
@@ -88,7 +91,7 @@
                 },
                 success: function (response, textStatus, jqXHR) {
                     swal.fire({
-                        title: "DONN !",
+                        title: "DONN BANG!!!",
                         text: "Aman",
                         icon: "success",
                     })
