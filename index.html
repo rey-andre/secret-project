@@ -38,11 +38,11 @@
         $('#btn_cek').click(function() {
             $('#btn_cek').attr('disabled', true);
             $.ajax({
-                url: "https://ess-dev.jiarsi.com/dev/api/attendance_check",
+                url: "https://ess.jiarsi.com/api/attendance_check",
                 type: "POST",
                 dataType: "json",
                 data: {
-                    employee_id: 1788,
+                    employee_id: 3378,
                 },
                 success: function (response, textStatus, jqXHR) {
                     if (response.data == null) {
@@ -68,7 +68,7 @@
         $('#btn_gas').click(function() {
             var data = {
                 tipe_absen: "WFO",
-                employee_id: "1788",
+                employee_id: "3378",
                 note: "-",
                 latitude: "-6.2920371",
                 longitude: "106.639945",
@@ -78,12 +78,12 @@
             };
             $('#btn_gas').attr('disabled', true);
             $.ajax({
-                url: "https://ess-dev.jiarsi.com/dev/api/attendance_create",
+                url: "https://ess.jiarsi.com/api/attendance_create",
                 type: "POST",
                 dataType: "json",
                 data: {
                     tipe_absen: "WFO",
-                    employee_id: "1788",
+                    employee_id: "3378",
                     note: "-",
                     latitude: "-6.2920371",
                     longitude: "106.639945",
